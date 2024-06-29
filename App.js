@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { PaperProvider, Text, DarkTheme } from 'react-native-paper';
+import { PaperProvider, Text } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import { store } from './src/redux';
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,7 +31,6 @@ const StackNavigator = () => {
 const App = () => {
 
   const theme = {
-    ...DarkTheme,
     dark: false
   }
 
