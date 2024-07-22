@@ -1,14 +1,37 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, Image, StyleSheet, View, Easing } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from 'react-native-paper';
+import { useNavigation, ParamListBase } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CheckHasPassedByCarouselStart } from '../utils/functions';
+import { useDispatch } from 'react-redux';
 
-const SplashScreen = () => {
-    const translateY = useRef(new Animated.Value(Dimensions.get('screen').height)).current;
-    const opacity = useRef(new Animated.Value(0)).current;
+
+const SplashScreen: React.FC = () => {
+    const dispatch = useDispatch()
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
+
+    const [nextRoute, setNextRoute] = useState<string>()
+    const [timing, setTiming] = useState<number>(5000)
+
+    const translateY = useRef(new Animated.Value(Dimensions.get('screen').height)).current
+    const opacity = useRef(new Animated.Value(0)).current
+
+    const skipTiming = () => setTiming(0)
+
+    const checkNextRoute = async () => {
+        const passedByCarousel = await CheckHasPassedByCarouselStart()
+        dispatch({ type: 'SET_PASSED_CAROUSEL', payload: passedByCarousel ? true : false })
+
+        if (passedByCarousel) {
+            setNextRoute('login')
+        } else {
+            setNextRoute('stepsCarousel')
+        }
+    }
 
     useEffect(() => {
-        // Combine animations using Animated.parallel
         Animated.parallel([
             Animated.timing(translateY, {
                 toValue: 0,
@@ -22,13 +45,24 @@ const SplashScreen = () => {
                 easing: Easing.out(Easing.ease),
                 useNativeDriver: true,
             })
-        ]).start();
-    }, [translateY, opacity]);
+        ]).start()
+    }, [translateY, opacity])
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (nextRoute) navigation.navigate('stepsCarousel')
+        }, timing)
+
+        return () => clearTimeout(timeoutId)
+    }, [nextRoute, timing])
+
+    useEffect(() => {
+        checkNextRoute()
+    }, [])
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
             <LinearGradient
-                // Background Linear Gradient
                 colors={['#a6baf0', '#4067c7']}
                 style={styles.background}
             />

@@ -1,7 +1,7 @@
 {
   "name": "temporalapp",
   "version": "1.0.0",
-  "main": "expo/AppEntry.js",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@babel/plugin-transform-private-methods": "^7.24.7",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-navigation/native-stack": "^6.9.26",
     "@react-navigation/stack": "^6.3.29",
-    "expo": "~51.0.17",
+    "@types/react": "~18.2.79",
+    "expo": "~51.0.18",
     "expo-doctor": "^1.6.1",
     "expo-linear-gradient": "~13.0.2",
     "expo-status-bar": "~1.12.1",
@@ -21,7 +24,8 @@
     "react-native-paper": "^5.12.3",
     "react-native-safe-area-context": "4.10.1",
     "react-redux": "^9.1.2",
-    "redux-thunk": "^3.1.0"
+    "redux-thunk": "^3.1.0",
+    "typescript": "~5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
